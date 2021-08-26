@@ -13,18 +13,10 @@ module cyl(height, r, dir_x = 0, dir_y = 0, dir_z = 0){
     rotate([-90*dir_y, 90*dir_x, 90*dir_z]) cylinder(height, r, r);
 }
 
-// Bug doesn't reaturn expected for dir's
-module slice(angle1, angle2 = undef, dir_x = 0, dir_y = 0, dir_z = 0){
-    difference(){
+module slice(angleMin = 0, angleMax = 360, dir_x = 0, dir_y = 0, dir_z = 0){
+    intersection(){
+        rotate([-90*dir_y, 90*dir_x, 90*dir_z]) up(-1000) extrude(2000, [[0,0], [1000*cos(angleMin), 1000*sin(angleMin)], [1000*cos(angleMax), 1000*sin(angleMax)]]);
         children();
-        rotate([-90*dir_y, 90*dir_x, 90*dir_z]) rotate([0, 0, angle1 + 180]) translate([-200, 0, -200]) {
-            cube([400, 200, 400]);
-        }
-        if (angle2 != undef){
-            rotate([-90*dir_y, 90*dir_x, 90*dir_z]) rotate([0, 0, angle2]) translate([-200, 0, -200]) {
-                cube([400, 200, 400]);
-            }
-        }
     }
 }
 
@@ -63,20 +55,14 @@ module squircle(height, r = 1, x = 1, y = 1, p = 5, steps=100){
     scale([x/2, y/2, 1]) at(r, r) extrude(height, [for (x = [-r:r/steps*2:r]) [x, pow(pow(r, p) - pow(abs(x), p), 1/p)], for (x = [-r:r/steps*2:r]) [x, -pow(pow(r, p) - pow(abs(x), p), 1/p)]]);
 }
 
+module squircle2D(r = 1, x = 1, y = 1, p = 5, steps=100){
+    scale([x/2, y/2, 1]) at(r, r) polygon(points = [for (x = [-r:r/steps*2:r]) [x, pow(pow(r, p) - pow(abs(x), p), 1/p)], for (x = [-r:r/steps*2:r]) [x, -pow(pow(r, p) - pow(abs(x), p), 1/p)]]);
+}
 
-//squircle(10, 12.5, 5);
-squircle(1.5, x = 10, y = 20);
-//slice(0, 90, dir_z = 1) cyl(20, 10);
-//completion_extrude(1, [[10, 0], [11*cos(5), 11*sin(5)], [10*cos(20), 10*sin(20)]]);
-//extrude(1, for (i = [1:360] [cos(i), sin(i)]));
-//slice(30, 180) cyl(20, 50);
-//
-//at(40, 40) box(12, 12, 12);
-//
-//diff(){
-//    extrude(5, [[0, 0], [-10, 0], [-10, -10], [0, -10]]);
-//    cyl(5, 10);
-//}
-//
-//echo(missing_leg(5, 3));
+module pyramid(height, r, sides, upsidedown = false){
+    cylinder(height, upsidedown ? 0 : r, upsidedown ? r : 0, $fn = sides);
+}
 
+module up(z){
+    at(0, 0, z) children();
+}
