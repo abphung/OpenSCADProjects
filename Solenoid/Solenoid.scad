@@ -1,4 +1,5 @@
 use <helper.scad>;
+use <MCAD/nuts_and_bolts.scad>
 
 $fn = 180;
 
@@ -35,7 +36,12 @@ diff(){
         }
     }
     up(solenoidEndR) rotate([-90, 0, 0]) up(-100) cyl(1000, solenoidInnerR);
+    at(-3*solenoidEndR, solenoidL - solenoidEndL + solenoidEndR, solenoidEndL + 10) boltHole(3, units="MM", length= 30);
+    at(3*solenoidEndR, solenoidL - solenoidEndL + solenoidEndR) boltHole(3, units="MM", length= 30);
+    at(-3*solenoidEndR, solenoidEndL - solenoidEndR) boltHole(3, units="MM", length= 30);
+    at(3*solenoidEndR, solenoidEndL - solenoidEndR) boltHole(3, units="MM", length= 30);
 }
+at(-3*solenoidEndR, solenoidL - solenoidEndL + solenoidEndR, solenoidEndL) bolt(3, units="MM", length= 30)
 diff(){
     rotate([0, 0, -135]) box(solenoidL/sqrt(2), solenoidL/sqrt(2), solenoidEndL);
     at(0, -sqrt(2)/2, off) rotate([0, 0, -135]) box(solenoidL/sqrt(2) - 1, solenoidL/sqrt(2) - 1, solenoidEndL + buf);

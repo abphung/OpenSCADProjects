@@ -1,5 +1,6 @@
 // To use
 // use <helper.scad>;
+use <MCAD/nuts_and_bolts.scad>
 
 module at(x, y = 0, z = 0){
     translate([x, y, z]) children();
@@ -65,4 +66,8 @@ module pyramid(height, r, sides, upsidedown = false){
 
 module up(z){
     at(0, 0, z) children();
+}
+
+module bolt(size, units="MM", length, tolerance = +0.0001, proj = -1){
+    mirror([0, 0, 1]) boltHole(size, units = units, length = length, tolerance = tolerance, proj = proj);
 }
